@@ -20,7 +20,22 @@ population.csv - Estimate of population from United States Census Bureau https:/
 **state** - states in the U.S.<br/>
 **population** - U.S. population as of 2010 <br/>
 
-# Solutions to Scenarios (PostgreSQL, R, Python) 
-Scenario 1: Find states that have the highest number of confirmed cases in July 2020. <br/> 
+# Examples with Solutions (PostgreSQL, R, Python) 
+Scenario 1: Find state that have the highest percentage of infection rate in July 2020, round up to two decimals. (Infection rate is defined as case number/population, and here we do not consider people who got infected many times and only considered people who tested positive as infected) <br/> 
 
-
+**PostgreSql**
+```
+select b.state, round(c.state_case/b.state_population,2) as infection_rate from 
+  (select state, sum(population) as state_population from population 
+	group by state)b
+  left join 
+  (select a.state, sum(a.county_case) as state_case from 
+	    (select state, county, sum(cases) as county_case 
+      from covid_19_nyt	
+	    where to_char(date, 'YYYY-MM') = '2020-07'
+	    group by state, county)a
+  group by a.state)c
+  on b.state = c.state 
+order by 2 desc 
+limit 1 
+```
