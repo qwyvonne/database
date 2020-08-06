@@ -23,7 +23,7 @@ population.csv - Estimate of population from United States Census Bureau https:/
 # Examples with Solutions (PostgreSQL, R, Python) 
 Scenario 1: Find state that have the highest percentage of infection rate in July 2020, round up to two decimals. (Infection rate is defined as case number/population, and here we do not consider people who got infected many times and only considered people who tested positive as infected) <br/> 
 
-**PostgreSql**
+**PostgreSql: sum(), round(), left join, order by, limit**
 ```
 select b.state, round(c.state_case/b.state_population,2) as infection_rate from 
   (select state, sum(population) as state_population from population 
