@@ -39,3 +39,21 @@ select b.state, round(c.state_case/b.state_population,2) as infection_rate from
 order by 2 desc 
 limit 1 
 ```
+
+**R: dyplr, filter(), summarize(), group_by(), drop_na(), inner_join(), transmute()**
+```
+a = covid_19_nyt %>% 
+	filter(month(as.Date(covid_19_nyt$date, "%m/%d/%Y")) == 7) %>%
+  	group_by(state) %>% 
+	summarize(total_case = sum(cases)) %>% 
+ 	drop_na(state)
+
+b = population %>% 
+	group_by(state) %>% 
+	summarize(total_population = sum(population))
+
+inner_join(a,b) %>% 
+	mutate(infection_rate = total_case/total_population) %>% 
+ 	filter(infection_rate == max(infection_rate)) %>% 
+  	transmute(state,round(infection_rate,2))
+```
