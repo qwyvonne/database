@@ -21,7 +21,42 @@ population.csv - Estimate of population from United States Census Bureau https:/
 **population** - U.S. population as of 2010 <br/>
 
 # Examples with Solutions (PostgreSQL, R, Python) 
-Scenario 1: Find state that have the highest percentage of infection rate in July 2020, round up to two decimals. (Infection rate is defined as case number/population, and here we do not consider people who got infected many times and only considered people who tested positive as infected) <br/> 
+Scenario 1: Find cummulative case number in each state in descending order <br/>
+
+**PostgreSql**
+```
+select state, sum(cases) as cases from covid_19_nyt
+group by state 
+order by sum(cases) desc 
+```
+
+**R**
+```
+covid_19_nyt %>% group_by(state) %>% 
+	summarize(cases = sum(cases)) %>% 
+	arrange(desc(cases))
+```
+Scenario 2: Find the states that have fatality rate that is above the national fatality rate  <br/>
+**PostgreSql**
+```
+select a.state from 
+	(select state, sum(deaths)/sum(cases) as state_fatality_rate 
+	from covid_19_nyt
+	group by state)a
+inner join 
+	(select sum(deaths)/sum(cases) as national_fatality_rate
+	from covid_19_nyt)b
+on a.state_fatality_rate >= b.national_fatality_rate 
+```
+
+**R: distinct()**
+```
+covid_19_nyt %>% mutate(national_fatality_rate = sum(deaths)/sum(cases)) %>% 
+  group_by(state) %>% mutate(state_fatality_rate = sum(deaths)/sum(cases)) %>% 
+  filter(state_fatality_rate >= national_fatality_rate) %>% distinct(state)
+```
+
+Scenario 3: Find state that have the highest percentage of infection rate in July 2020, round up to two decimals. (Infection rate is defined as case number/population, and here we do not consider people who got infected many times and only considered people who tested positive as infected) <br/> 
 
 **PostgreSql: sum(), round(), left join, order by, limit**
 ```
