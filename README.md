@@ -20,7 +20,7 @@ population.csv - Estimate of population from United States Census Bureau https:/
 **state** - states in the U.S.<br/>
 **population** - U.S. population as of 2010 <br/>
 
-3) **complete_stay_at_home**<br/>
+3) **gov_order.csv**<br/>
 **state** - 50 U.S. states and Washington D.C.<br/>
 **closure_school** - date that closure of schools order was issued by state government<br/>
 **closure_workplaces** - date that closure of workplaces order was issued by state government<br/>
@@ -125,7 +125,7 @@ left join
 			(select state, date, sum(cases) as state_case from covid_19_nyt 
 			group by 1, 2)a
 			inner join 
-			(select state, min(cancellation_public_events) as first_order from complete_stay_at_home
+			(select state, min(cancellation_public_events) as first_order from gov_order
 			group by 1)b
 			on a.state = b.state and date_part('day', b.first_order - a.date) = 15)c
 		group by 1)d 
