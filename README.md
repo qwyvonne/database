@@ -115,7 +115,7 @@ end as effectiveness from
 			(select state, date, sum(cases) as state_case from covid_19_nyt 
 			group by 1, 2)a
 			inner join 
-			(select state, min(cancellation_public_events) as first_order from complete_stay_at_home
+			(select state, min(cancellation_public_events) as first_order from gov_order
 			group by 1)b
 			on a.state = b.state and date_part('day', a.date - b.first_order) = 15)c
 		group by 1)c
