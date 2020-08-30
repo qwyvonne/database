@@ -132,3 +132,58 @@ left join
 on c.state = d.state
 order by 2
 ```
+
+**Result**
+
+| state         | effectiveness| 
+| ------------- | ------- |
+|Nebraska	|effectice|
+|Oklahoma	|effectice|
+|Oregon 	|effectice|
+|Massachusetts	|effectice|
+|Rhode Island	|effectice|
+|Georgia	|effectice|
+|Arizona	|effectice|
+|Tennessee	|effectice|
+|Texas		|effectice|
+|Utah		|effectice|
+|Illinois	|effectice|
+|New York	|effectice|
+|Washington	|effectice|
+|California	|effectice|
+|Wisconsin	|effectice|
+|Florida	|effectice|
+|Minnesota	|not effective|
+|Mississippi	|not effective|
+|Missouri	|not effective|
+|Montana	|not effective|
+|Nevada		|not effective|
+|New Hampshire	|not effective|
+|New Jersey	|not effective|
+|New Mexico	|not effective|
+|North Carolina	|not effective|
+|North Dakota	|not effective|
+|Ohio		|not effective|
+|Pennsylvania	|not effective|
+|South Carolina |not effective|
+|South Dakota	|not effective|
+|Vermont	|not effective|
+|Virginia	|not effective|
+|West Virginia	|not effective|
+|Alabama	|not effective|
+|Wyoming	|not effective|
+|Alaska		|not effective|
+|Arkansas	|not effective|
+|Colorado	|not effective|
+|Connecticut	|not effective|
+|Delaware	|not effective|
+|District of Columbia	|not effective|
+|Hawaii		|not effective|
+|Indiana	|not effective|
+|Iowa		|not effective|
+|Kansas		|not effective|
+|Kentucky	|not effective|
+|Louisiana	|not effective|
+|Maine		|not effective|
+|Maryland	|not effective|
+|Michigan	|not effective|
