@@ -107,7 +107,7 @@ Scenario 4: Calculate average number of cases within 15 days of timeframe per st
 ```
 select c.state, 
 case 
-	when c.case_after > d.case_before then 'effectice'
+	when c.case_after > d.case_before then 'effective'
 	else 'not effective'
 end as effectiveness from 
 	(select c.state, round(avg(c.state_case),0) as case_after from 
