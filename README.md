@@ -21,10 +21,10 @@ population.csv - Estimate of population from United States Census Bureau https:/
 **population** - U.S. population as of 2010 <br/>
 
 3) **complete_stay_at_home**<br/>
-**state** - 50 U.S. states and Washington D.C. 
-**closure_school** - date that closure of schools order was issued by state government 
-**closure_workplaces** - date that closure of workplaces order was issued by state government 
-**cancellation_public_events** - date that cancellation of public events order was issued by state govenment<br/>
+**state** - 50 U.S. states and Washington D.C.<br/>
+**closure_school** - date that closure of schools order was issued by state government<br/>
+**closure_workplaces** - date that closure of workplaces order was issued by state government<br/>
+**cancellation_public_events** - date that cancellation of public events order was issued by state government<br/>
 
 # Examples with Solutions (PostgreSQL, R, Python) 
 Scenario 1: Find cummulative case number in each state in descending order <br/>
