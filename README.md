@@ -6,7 +6,7 @@ population.csv - Estimate of population from United States Census Bureau https:/
 <br/> 
 <br/>
 **METADATA** <br/>
-1) **covid_19_nyt.csv <br/>**
+1) **covid_19_nyt.csv**<br/>
 **date** - date of the COVID-19 case number and deaths being reported <br/>
 **state** - states in the U.S.<br/>
 **fips** - The Federal Information Processing Standard Publication 6-4 was a five-digit Federal Information Processing Standards code which uniquely identified counties and county equivalents in the United States, certain U.S. possessions, and certain freely associated states<br/>
@@ -19,6 +19,12 @@ population.csv - Estimate of population from United States Census Bureau https:/
 **county** - a political and administrative division of a state, providing certain local governmental services<br/>
 **state** - states in the U.S.<br/>
 **population** - U.S. population as of 2010 <br/>
+
+3) **complete_stay_at_home**<br/>
+**state** - 50 U.S. states and Washington D.C. 
+**closure_school** - date that closure of schools order was issued by state government 
+**closure_workplaces** - date that closure of workplaces order was issued by state government 
+**cancellation_public_events** - date that cancellation of public events order was issued by state govenment<br/>
 
 # Examples with Solutions (PostgreSQL, R, Python) 
 Scenario 1: Find cummulative case number in each state in descending order <br/>
@@ -36,6 +42,7 @@ covid_19_nyt %>% group_by(state) %>%
 	summarize(cases = sum(cases)) %>% 
 	arrange(desc(cases))
 ```
+
 Scenario 2: Find the states that have fatality rate that is above the national fatality rate  <br/>
 **PostgreSql**
 ```
@@ -91,4 +98,37 @@ inner_join(a,b) %>%
 	mutate(infection_rate = total_case/total_population) %>% 
  	filter(infection_rate == max(infection_rate)) %>% 
   	transmute(state,round(infection_rate,2))
+```
+Scenario 4: Calculate average number of cases within 15 days of timeframe per state before and after the first time that cancellation of public events is being placed in that state if there is any. If the average case number after the lauch of the policy is smaller than the that of before, we will return "effective", otherwise "not effective" and name this column as effectiveness; Return state and effectiveness. <br/>
+
+**R**
+
+**PostgreSql: date_part(), case when ... then, else ...**
+```
+select c.state, 
+case 
+	when c.case_after > d.case_before then 'effectice'
+	else 'not effective'
+end as effectiveness from 
+	(select c.state, round(avg(c.state_case),0) as case_after from 
+		(select a.state, a.date, a.state_case, b.first_order from 
+			(select state, date, sum(cases) as state_case from covid_19_nyt 
+			group by 1, 2)a
+			inner join 
+			(select state, min(cancellation_public_events) as first_order from complete_stay_at_home
+			group by 1)b
+			on a.state = b.state and date_part('day', a.date - b.first_order) = 15)c
+		group by 1)c
+left join
+	(select c.state, round(avg(c.state_case),0) as case_before from 
+	       (select a.state, a.date, a.state_case, b.first_order from 
+			(select state, date, sum(cases) as state_case from covid_19_nyt 
+			group by 1, 2)a
+			inner join 
+			(select state, min(cancellation_public_events) as first_order from complete_stay_at_home
+			group by 1)b
+			on a.state = b.state and date_part('day', b.first_order - a.date) = 15)c
+		group by 1)d 
+on c.state = d.state
+order by 2
 ```
